@@ -1,0 +1,16 @@
+{
+  "name": "uconn-events-tools",
+  "private": true,
+  "type": "module",
+  "description": "Local UX and accessibility audit, plus a viewport screenshot helper.",
+  "scripts": {
+    "audit": "node ux-audit.mjs ../index.html",
+    "audit:phone": "node ux-audit.mjs ../index.html 390 844",
+    "shot": "node shot.mjs ../index.html 1280 900 ../screenshot.png",
+    "shot:phone": "node shot.mjs ../index.html 390 844 ../screenshot-phone.png"
+  },
+  "dependencies": {
+    "axe-core": "^4.10.0",
+    "playwright-core": "^1.49.0"
+  }
+}

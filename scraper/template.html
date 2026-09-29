@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UConn Events</title>
+<meta name="description" content="Every UConn event, sorted by what is live, upcoming, and past.">
+<style>
+/* ============================================================
+   Palette. Warm paper in light mode, deep ink in dark. Navy is
+   the accent because it is UConn's, with a muted gold used
+   sparingly so the page does not read as a corporate deck.
+   ============================================================ */
+:root {
+  --paper: #faf9f7;
+  --paper-2: #f2f0ec;
+  --card: #ffffff;
+  --line: #e7e4de;
+  --line-soft: #f0eee9;
+  --ink: #1c1b19;
+  --ink-2: #4a4844;
+  /* ink-3 and ink-4 are tuned for WCAG AA on card, paper, and paper-2.
+     The earlier values measured 4.07 and 2.18 and failed an axe audit. */
+  --ink-3: #6b6862;
+  --ink-4: #6f6c66;
+  --navy: #0a3d62;
+  --navy-2: #12507e;
+  --navy-wash: #eaf1f7;
+  --gold: #7d5610;
+  --gold-wash: #fbf2e0;
+  --live: #12704a;
+  --live-wash: #e6f4ec;
+  --live-ring: rgba(18, 112, 74, .35);
+  --rose: #a03a3a;
+  --rose-wash: #fbecec;
+  --shadow-s: 0 1px 2px rgba(28, 27, 25, .05);
+  --shadow-m: 0 1px 3px rgba(28, 27, 25, .06), 0 6px 18px -8px rgba(28, 27, 25, .14);
+  --shadow-l: 0 2px 6px rgba(28, 27, 25, .07), 0 18px 40px -18px rgba(28, 27, 25, .22);
+  --r-s: 8px;
+  --r-m: 12px;
+  --r-l: 16px;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+[data-theme="dark"] {
+  --paper: #14161a;
+  --paper-2: #1a1d22;
+  --card: #1e2127;
+  --line: #2c3038;
+  --line-soft: #24272e;
+  --ink: #ecedf0;
+  --ink-2: #c3c7cf;
+  --ink-3: #a2a8b2;
+  --ink-4: #8b929c;
+  --navy: #7fb6de;
+  --navy-2: #9cc8e8;
+  --navy-wash: #1b2632;
+  --gold: #d8a64a;
+  --gold-wash: #2c2415;
+  --live: #52cf9c;
+  --live-wash: #16301f;
+  --live-ring: rgba(82, 207, 156, .3);
+  --rose: #e88a8a;
+  --rose-wash: #331c1c;
+  --shadow-s: 0 1px 2px rgba(0, 0, 0, .3);
+  --shadow-m: 0 1px 3px rgba(0, 0, 0, .35), 0 6px 18px -8px rgba(0, 0, 0, .5);
+  --shadow-l: 0 2px 6px rgba(0, 0, 0, .4), 0 18px 40px -18px rgba(0, 0, 0, .6);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 15px/1.5 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+a { color: var(--navy); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+
+.wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px 96px; }
+/* Same column width as .wrap, without the 96px page-bottom padding, which
+   inside the header band showed up as a large empty gap. */
+.band { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+/* ============================================================
+   Masthead. A soft wash and a hairline rule, not a big block
+   of colour, so the page still feels like paper.
+   ============================================================ */
+.wash {
+  background:
+    radial-gradient(120% 100% at 15% 0%, var(--navy-wash) 0%, transparent 55%),
+    radial-gradient(90% 90% at 100% 0%, var(--gold-wash) 0%, transparent 50%);
+  border-bottom: 1px solid var(--line);
+}
+header { padding: 40px 0 28px; margin-bottom: 0; }
+.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.mark {
+  width: 38px; height: 38px; border-radius: 10px; flex: none;
+  background: var(--navy); color: #fff;
+  display: grid; place-items: center;
+  font: 700 16px/1 var(--serif); letter-spacing: -.02em;
+  box-shadow: var(--shadow-m);
+}
+[data-theme="dark"] .mark { color: #14161a; }
+h1 {
+  margin: 0; font: 600 30px/1.15 var(--serif);
+  letter-spacing: -.02em;
+}
+h1 em { font-style: normal; color: var(--ink-3); font-weight: 400; }
+.tagline { margin: 7px 0 0; color: var(--ink-2); font-size: 14.5px; }
+.tagline b { color: var(--ink); font-weight: 600; }
+.headright { display: flex; align-items: center; gap: 10px; }
+
+.iconbtn {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--r-s); padding: 8px 13px;
+  box-shadow: var(--shadow-s); white-space: nowrap; font-size: 13.5px;
+  transition: background .15s, border-color .15s;
+}
+.iconbtn:hover { background: var(--paper-2); border-color: var(--ink-4); }
+
+/* ---- Live clock strip ---- */
+.nowstrip {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line);
+  font-size: 13px; color: var(--ink-3);
+}
+.nowstrip .clock { font-variant-numeric: tabular-nums; color: var(--ink-2); font-weight: 550; }
+.fact { display: inline-flex; align-items: center; gap: 6px; }
+.fact .n { color: var(--ink); font-weight: 650; font-variant-numeric: tabular-nums; }
+.fact.live .n { color: var(--live); }
+.dotsep {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--ink-4); flex: none; opacity: .8;
+}
+
+/* ============================================================
+   Controls
+   ============================================================ */
+/* Not sticky: with a month of events the page is long, and pinning two
+   rows of chips costs a tenth of the viewport for the whole scroll. The
+   search box alone gets the keyboard shortcut instead. */
+.controls {
+  border-bottom: 1px solid var(--line);
+  margin: 0 -24px 4px; padding: 14px 24px;
+}
+.crow { display: flex; gap: 9px; flex-wrap: wrap; align-items: center; }
+.crow + .crow { margin-top: 9px; }
+
+/* Search is the primary control: with the place and sort dropdowns gone it
+   carries the whole "find a specific thing" job, so it gets the size and the
+   focus ring rather than sitting level with a row of selects. */
+.searchwrap { position: relative; display: block; }
+.searchwrap svg {
+  position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+  color: var(--ink-3); pointer-events: none;
+}
+.search {
+  width: 100%; background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--r-m); padding: 13px 84px 13px 46px;
+  font-size: 16px; box-shadow: var(--shadow-m);
+  transition: border-color .15s, box-shadow .15s;
+}
+.search::placeholder { color: var(--ink-4); }
+.search:focus {
+  outline: none; border-color: var(--navy);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--navy) 14%, transparent),
+             var(--shadow-m);
+}
+.clearbtn {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: var(--paper-2); border: 1px solid var(--line);
+  border-radius: var(--r-s); padding: 6px 11px; font-size: 12.5px;
+  color: var(--ink-2); min-height: 28px;
+}
+.clearbtn:hover { border-color: var(--navy); color: var(--navy); }
+select {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--r-s); padding: 9px 11px;
+  box-shadow: var(--shadow-s); max-width: 220px;
+}
+select:focus { outline: none; border-color: var(--navy); }
+
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 999px; padding: 6px 13px; font-size: 13.5px;
+  box-shadow: var(--shadow-s); transition: all .15s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.chip:hover { border-color: var(--ink-4); }
+.chip .tally { font-size: 11.5px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
+.chip[aria-pressed="true"] {
+  background: var(--ink); color: var(--paper); border-color: var(--ink);
+  font-weight: 550;
+}
+.chip[aria-pressed="true"] .tally { color: #ffffff; }
+.count { color: var(--ink-3); font-size: 13px; margin-left: auto; white-space: nowrap; }
+
+/* Topic chips: one row that scrolls sideways on a narrow screen rather than
+   wrapping into five rows and pushing the events off the first screen. */
+.topicscroll {
+  overflow-x: auto; overflow-y: hidden; padding-bottom: 2px;
+  /* min-width: 0 is essential: a flex item defaults to min-content width,
+     so without it this row grew to 1939px and dragged the page with it. */
+  min-width: 0; width: 100%; max-width: 100%;
+  -webkit-overflow-scrolling: touch; scrollbar-width: thin;
+}
+/* align-items matters: the flex default is stretch, which made every topic
+   chip as tall as the tallest one and turned the pills into circles. */
+.topicscroll .chips { flex-wrap: nowrap; align-items: center; }
+.topicscroll .chip { flex: 0 0 auto; white-space: nowrap; }
+.chip.topic[aria-pressed="true"] {
+  background: var(--navy); border-color: var(--navy); color: #fff;
+}
+.chip.topic[aria-pressed="true"] .tally {
+  color: color-mix(in srgb, #ffffff 70%, transparent);
+}
+
+
+/* ============================================================
+   Topic colour. Two variables per topic, both measured to clear WCAG AA
+   against the surface they land on:
+
+     --topic-base   the saturated colour, for the chip dot and the panel rule
+     --topic-accent dark mode swaps this for a lightened value, because the
+                    saturated one fails on the dark card
+     --topic-ink    dark enough for text on that topic's wash (light mode)
+     --topic-wash   the label background
+
+   Kept as a tint rather than a filled block: the page already uses colour to
+   mean state, so a second loud palette would fight it. The label always
+   carries the word too, so colour is never the only cue.
+   ============================================================ */
+[data-topic] {
+  --topic-base: var(--ink-4);
+  --topic-accent: var(--topic-base);
+  --topic-wash: var(--paper-2);
+  --topic-ink: var(--ink-2);
+}
+[data-topic="Academic and research"] {
+  --topic-base: #2f5d8a; --topic-accent: #2f5d8a;
+  --topic-wash: #e8eef5; --topic-ink: #2f5d8a;
+}
+[data-topic="Sports and fitness"] {
+  --topic-base: #2f7a56; --topic-accent: #2d7653;
+  --topic-wash: #e6f1ea; --topic-ink: #2d7653;
+}
+[data-topic="Health and wellness"] {
+  --topic-base: #1f7a78; --topic-accent: #1e7674;
+  --topic-wash: #e2f0f0; --topic-ink: #1e7674;
+}
+[data-topic="Community and service"] {
+  --topic-base: #6b5aa6; --topic-accent: #6b5aa6;
+  --topic-wash: #ece8f6; --topic-ink: #6b5aa6;
+}
+[data-topic="Music and performance"] {
+  --topic-base: #9c4f7e; --topic-accent: #9c4f7e;
+  --topic-wash: #f6e9f1; --topic-ink: #9c4f7e;
+}
+[data-topic="Career and jobs"] {
+  --topic-base: #996a1c; --topic-accent: #8f631a;
+  --topic-wash: #f6eeda; --topic-ink: #8f631a;
+}
+[data-topic="Arts and exhibits"] {
+  --topic-base: #8a4f2f; --topic-accent: #8a4f2f;
+  --topic-wash: #f5eae2; --topic-ink: #8a4f2f;
+}
+[data-topic="Campus life"] {
+  --topic-base: #55606f; --topic-accent: #55606f;
+  --topic-wash: #eaecef; --topic-ink: #55606f;
+}
+[data-topic="Food and dining"] {
+  --topic-base: #a0532a; --topic-accent: #a0532a;
+  --topic-wash: #f8e9df; --topic-ink: #a0532a;
+}
+[data-topic="Other"] {
+  --topic-base: #8f8b83; --topic-accent: #6c6963;
+  --topic-wash: #f0efec; --topic-ink: #6c6963;
+}
+[data-theme="dark"] [data-topic="Academic and research"] { --topic-accent: #4890d5; --topic-ink: #a8cdeb; --topic-wash: #1b2734; }
+[data-theme="dark"] [data-topic="Sports and fitness"]    { --topic-accent: #3a986b; --topic-ink: #8fd6b3; --topic-wash: #16281f; }
+[data-theme="dark"] [data-topic="Health and wellness"]   { --topic-accent: #269896; --topic-ink: #85d6d4; --topic-wash: #132827; }
+[data-theme="dark"] [data-topic="Community and service"] { --topic-accent: #9079e0; --topic-ink: #c3b6f0; --topic-wash: #221d33; }
+[data-theme="dark"] [data-topic="Music and performance"] { --topic-accent: #ca66a3; --topic-ink: #eaa9cd; --topic-wash: #2c1a26; }
+[data-theme="dark"] [data-topic="Career and jobs"]       { --topic-accent: #b77f21; --topic-ink: #e0b976; --topic-wash: #292013; }
+[data-theme="dark"] [data-topic="Arts and exhibits"]     { --topic-accent: #c87244; --topic-ink: #e6ae8d; --topic-wash: #2c1e16; }
+[data-theme="dark"] [data-topic="Campus life"]           { --topic-accent: #7b8ba0; --topic-ink: #b3c0d0; --topic-wash: #1e2229; }
+[data-theme="dark"] [data-topic="Food and dining"]       { --topic-accent: #d87038; --topic-ink: #efab8a; --topic-wash: #2d1d14; }
+[data-theme="dark"] [data-topic="Other"]                 { --topic-accent: #8f8b83; --topic-ink: #bcb8b0; --topic-wash: #232322; }
+
+/* The panel's left rule carries the topic. A live panel keeps its green rule,
+   because being live right now matters more than what it is about. */
+article.card { border-left: 3px solid var(--topic-accent, var(--line)); }
+article.card.is-live { border-left-color: var(--live); }
+
+/* Chip dot repeats the topic colour so the link to the panel is obvious. */
+.chip.topic { border-color: color-mix(in srgb, var(--topic-accent) 32%, var(--line)); }
+.chip.topic .dot {
+  width: 8px; height: 8px; border-radius: 50%; flex: none;
+  background: var(--topic-accent);
+}
+.chip.topic[aria-pressed="true"] {
+  background: var(--topic-accent); border-color: var(--topic-accent); color: #fff;
+}
+.chip.topic[aria-pressed="true"] .dot { background: #fff; }
+.chip.topic[aria-pressed="true"] .tally { color: #ffffff; }
+
+/* Panel label: topic ink on its own wash. */
+.cfoot .tag { background: var(--topic-wash); color: var(--topic-ink); }
+
+/* ============================================================
+   Day grouping — the thing that makes a list of 1000
+   scannable. Sticky day header, then that day's cards.
+   ============================================================ */
+.day { margin-top: 32px; }
+.dayhead {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 6px 0 9px; margin-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.dayhead h2 {
+  margin: 0; font: 600 15px/1 var(--sans);
+  letter-spacing: .01em; text-transform: uppercase;
+  font-size: 12.5px; color: var(--ink-2);
+}
+.dayhead .rel { color: var(--ink-4); font-size: 12.5px; }
+.dayhead .n { margin-left: auto; color: var(--ink-4); font-size: 12.5px;
+              font-variant-numeric: tabular-nums; }
+.pill {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; padding: 3px 7px; border-radius: 5px;
+}
+.pill.today { background: var(--live-wash); color: var(--live); }
+.pill.tomorrow { background: var(--navy-wash); color: var(--navy); }
+
+/* Every panel is the same size. The title is clamped to three lines and the
+   place to two, so the tallest real panel sets the row height. A fixed
+   `grid-auto-rows` then makes every row exactly that tall and every panel
+   fills its row, whatever its own content happens to be. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-auto-rows: 202px;
+  gap: 14px;
+}
+.grid > article.card { height: 100%; }
+
+/* ---- A row that leads a day is allowed to be wider ---- */
+@media (min-width: 900px) {
+  .grid > article:first-child.wide { grid-column: span 2; }
+}
+
+/* ============================================================
+   Cards
+   ============================================================ */
+article.card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--r-m); padding: 13px 16px 12px;
+  box-shadow: var(--shadow-s);
+  display: flex; flex-direction: column; gap: 9px;
+  position: relative; transition: box-shadow .18s, transform .18s, border-color .18s;
+  /* Grid and flex items default to min-content width. Without this a card
+     whose content cannot shrink (a long place name, a nowrap link) drags the
+     whole page wider than the viewport. */
+  min-width: 0;
+  height: 100%;
+}
+article.card:hover {
+  box-shadow: var(--shadow-m); transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--line) 40%, var(--ink-4));
+}
+article.card.is-live {
+  border-left: 3px solid var(--live);
+  border-top-left-radius: 4px; border-bottom-left-radius: 4px;
+  padding-left: 15px;
+}
+article.card.is-past { box-shadow: none; background: var(--paper-2); }
+article.card.is-past .ctitle a { color: var(--ink-2); }
+article.card.is-cancelled .ctitle a { text-decoration: line-through; color: var(--ink-3); }
+
+.liveflag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--live);
+}
+.liveflag .beacon {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--live);
+  box-shadow: 0 0 0 0 var(--live-ring);
+  animation: beacon 2.4s ease-out infinite;
+}
+@keyframes beacon {
+  0% { box-shadow: 0 0 0 0 var(--live-ring); }
+  70%, 100% { box-shadow: 0 0 0 7px rgba(0, 0, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .liveflag .beacon { animation: none; } }
+
+.ctop { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-height: 18px; }
+.ctitle {
+  margin: 0; font-size: 16.5px; font-weight: 620; line-height: 1.32;
+  letter-spacing: -.011em; flex: none;
+  /* Some event titles describe a link and carry a bare URL, which will not
+     wrap on its own and pushed the page 55px wide on a phone. */
+  overflow-wrap: anywhere;
+  /* Three lines maximum, so every panel is the same height. Both a clamp and
+     a hard max-height: the clamp gives the ellipsis, and the max-height is
+     what actually holds the box at three lines inside a flex column, where
+     line-clamp alone was letting a long title run to five. */
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 66px;
+}
+.ctitle a {
+  color: var(--ink);
+  /* the card's main link: give it a real hit area, not a 19px text row */
+  display: inline-block; padding: 2px 0; min-height: 24px;
+}
+.ctitle a:hover { color: var(--navy); text-decoration: none; }
+
+.facts { display: flex; flex-direction: column; gap: 5px; font-size: 13.5px;
+         margin-top: auto; }
+.factrow { display: flex; gap: 8px; align-items: flex-start; }
+.factrow .ico {
+  flex: 0 0 15px; color: var(--ink-4); margin-top: 3px;
+}
+.factrow .ico svg { display: block; width: 14px; height: 14px; }
+.factrow .txt { color: var(--ink-2); }
+.factrow .txt b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.factrow .rel { color: var(--ink-4); }
+/* One line of place only. Two lines made the panel's required height swing
+   by 50px depending on the length of a building name, which is what forced
+   the row either to overflow or to be mostly empty. */
+.factrow .txt.clamp {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.cfoot { display: flex; align-items: center; gap: 12px;
+         padding-top: 4px; font-size: 12.5px; color: var(--ink-4);
+         margin-top: auto; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; min-width: 0; }
+.tag {
+  background: var(--paper-2); color: var(--ink-3);
+  border-radius: 5px; padding: 2px 7px; font-size: 11.5px; font-weight: 550;
+}
+.tag.multi { background: var(--navy-wash); color: var(--navy); }
+.tag.free { background: var(--live-wash); color: var(--live); }
+.tag.paid { background: var(--gold-wash); color: var(--gold); }
+.tag.cancel { background: var(--rose-wash); color: var(--rose); }
+.tag.count {
+  background: var(--ink); color: var(--paper); border: 1px solid var(--ink);
+  min-height: 24px; padding: 3px 8px; cursor: pointer; line-height: 1;
+}
+.tag.count:hover { background: var(--navy); border-color: var(--navy); }
+.gofor {
+  margin-left: auto; color: var(--navy); white-space: nowrap;
+  display: inline-flex; align-items: center; min-height: 24px; padding: 3px 0;
+}
+
+
+.none { text-align: center; padding: 64px 20px; color: var(--ink-3); }
+.none h3 { margin: 0 0 6px; color: var(--ink); font-size: 18px; font-family: var(--serif); }
+.none button { margin-top: 14px; }
+
+footer {
+  margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line);
+  color: var(--ink-4); font-size: 12.5px; line-height: 1.7;
+}
+/* An inline link inside body text must not rely on colour alone. */
+footer a { text-decoration: underline; text-underline-offset: 2px;
+           display: inline-block; min-height: 24px; line-height: 24px; }
+kbd {
+  background: var(--paper-2); border: 1px solid var(--line);
+  border-bottom-width: 2px; border-radius: 5px; padding: 1px 5px;
+  font: inherit; font-size: 11.5px;
+}
+
+@media (max-width: 760px) {
+  .wrap, .band { padding-left: 16px; padding-right: 16px; }
+  .wrap { padding-bottom: 72px; }
+  .controls { margin: 0 -16px 4px; padding: 10px 16px; }
+  header { padding: 28px 0 22px; }
+  h1 { font-size: 24px; }
+  .grid { grid-template-columns: 1fr; }
+  .count { margin-left: 0; width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="wash">
+  <div class="band">
+    <header>
+      <div class="top">
+        <div>
+          <div class="brand">
+            <div class="mark">UC</div>
+            <h1>UConn Events</h1>
+          </div>
+          <p class="tagline" id="tagline"></p>
+        </div>
+        <div class="headright">
+          <button class="iconbtn" id="theme" type="button">Dark mode</button>
+        </div>
+      </div>
+      <div class="nowstrip" id="nowstrip"></div>
+    </header>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="controls">
+    <div class="crow">
+      <label class="searchwrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
+        </svg>
+        <input class="search" id="q" type="search" autocomplete="off"
+               aria-label="Search events"
+               placeholder="Search events by name, topic, or place">
+        <button class="clearbtn" id="clear" type="button" hidden
+                aria-label="Clear the search">Clear</button>
+      </label>
+    </div>
+    <div class="crow">
+      <div class="chips" id="states"></div>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="crow">
+      <div class="topicscroll"><div class="chips" id="topics"></div></div>
+    </div>
+  </div>
+
+  <div id="out"></div>
+
+  <footer>
+    Data from the <a href="https://events.uconn.edu/" target="_blank"
+    rel="noopener">UConn calendar</a>, read __BUILT__.
+    <span id="footcount"></span><br>
+    Press <kbd>/</kbd> to search and <kbd>Esc</kbd> to clear.
+    Live and past states recheck themselves every 30 seconds.
+  </footer>
+</div>
+
+<script id="event-data" type="application/json">/*__DATA__*/null</script>
+<script>
+"use strict";
+
+var DATA = JSON.parse(document.getElementById("event-data").textContent);
+var NOW = Date.now();
+var DAY = 86400000;
+
+/* ------------------------------------------------------------------
+   What state is this event in?
+
+   live   happening right now (a multi-day run is live the whole time)
+   soon   starts later
+   past   already over
+   cancel called off
+
+   All-day events are judged by calendar day, not by clock time. A timed
+   event with no end is treated as a one hour slot so it cannot sit in
+   "live" forever.
+------------------------------------------------------------------ */
+function midnight(ts) {
+  var d = new Date(ts);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+}
+
+function stateOf(ev) {
+  if (ev.cancelled) return "cancel";
+  var s = ev.starts_ts, e = ev.ends_ts || ev.starts_ts;
+  if (!s) return "soon";
+  if (ev.all_day) {
+    s = midnight(s);
+    e = midnight(e) + DAY;
+  } else if (e <= s) {
+    e = s + 3600000;
+  }
+  if (NOW >= s && NOW < e) return "live";
+  return NOW < s ? "soon" : "past";
+}
+
+/* ------------------------------------------------------------------
+   Formatting
+------------------------------------------------------------------ */
+var WD = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+var WDS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+var MO = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"];
+var MOS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function clock(ts) {
+  var d = new Date(ts), h = d.getHours(), m = d.getMinutes();
+  var ap = h < 12 ? "am" : "pm";
+  h = h % 12; if (h === 0) h = 12;
+  return h + (m ? ":" + String(m).padStart(2, "0") : "") + ap;
+}
+
+function shortDay(ts) {
+  var d = new Date(ts);
+  return WDS[d.getDay()] + ", " + MOS[d.getMonth()] + " " + d.getDate();
+}
+
+function longDay(ts) {
+  var d = new Date(ts);
+  return WD[d.getDay()] + ", " + MO[d.getMonth()] + " " + d.getDate();
+}
+
+function relative(ts) {
+  var diff = ts - NOW, abs = Math.abs(diff);
+  var mins = Math.round(abs / 60000);
+  if (mins < 1) return diff > 0 ? "any second" : "just now";
+  if (mins < 60) return diff > 0 ? "in " + mins + " min" : mins + " min ago";
+  var hrs = Math.round(mins / 60);
+  if (hrs < 24) return diff > 0 ? "in " + hrs + " hr" : hrs + " hr ago";
+  var dys = Math.round(hrs / 24);
+  if (dys < 30) return diff > 0 ? "in " + dys + " day" + (dys > 1 ? "s" : "")
+                                : dys + " day" + (dys > 1 ? "s" : "") + " ago";
+  var mos = Math.round(dys / 30);
+  return diff > 0 ? "in " + mos + " mo" : mos + " mo ago";
+}
+
+function whenText(ev) {
+  var s = ev.starts_ts, e = ev.ends_ts || ev.starts_ts;
+  if (!s) return "Date to be announced";
+  if (ev.all_day) {
+    if (ev.multi_day && e && midnight(e) !== midnight(s)) {
+      return shortDay(s) + " to " + shortDay(e) + ", all day";
+    }
+    return "All day";
+  }
+  var out = clock(s);
+  out += (e && e > s) ? " to " + clock(e) : " to " + clock(s + 3600000);
+  return out;
+}
+
+/* ------------------------------------------------------------------
+   Grouping. The feed lists each day of a long run, and weekly
+   classes repeat for months. Same title + place + host becomes one
+   card with a count, expandable.
+
+   Keys are hashed because the raw key needs a delimiter that cannot
+   occur in a title, and control characters are illegal in an HTML
+   attribute: the parser swaps them for U+FFFD and the key read back
+   from the DOM stops matching. A hex digest is always safe.
+------------------------------------------------------------------ */
+var expanded = {};
+var keyCache = {};
+
+function hashKey(s) {
+  var h = 2166136261;
+  for (var i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(16) + "-" + s.length;
+}
+
+function groupKey(ev) {
+  var raw = (ev.title || "").trim().toLowerCase() + "|" +
+            (ev.location || "").trim().toLowerCase() + "|" +
+            (ev.organizer || "").trim().toLowerCase();
+  if (!keyCache[raw]) keyCache[raw] = hashKey(raw);
+  return keyCache[raw];
+}
+
+/* ------------------------------------------------------------------
+   Filter state
+------------------------------------------------------------------ */
+var state = "all", q = "", topic = "";
+
+function matches(ev) {
+  if (state !== "all" && stateOf(ev) !== state) return false;
+  if (topic && (ev.topic || "Other") !== topic) return false;
+  if (q) {
+    var hay = (ev.title + " " + (ev.location || "") + " " + (ev.topic || "") + " " +
+               (ev.organizer || "") + " " + (ev.description || "")).toLowerCase();
+    if (hay.indexOf(q) === -1) return false;
+  }
+  return true;
+}
+
+/* One order only: whatever starts soonest comes first. Sorting by title or
+   by latest date was more choice than this list needed, so it is gone. */
+/* Sort within a day by clock time, so a day always reads top to bottom
+   even when the global order is A to Z. */
+function byClock(a, b) { return (a.starts_ts || 0) - (b.starts_ts || 0); }
+
+function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/* ------------------------------------------------------------------
+   Icons. Drawn, not emoji: a glyph font renders these three as full
+   colour emoji on macOS, which is not the look and is against the
+   house rule. Each is a 14px stroke icon at 1.7 weight.
+------------------------------------------------------------------ */
+var ICON = {
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+         'stroke-width="1.7" stroke-linecap="round" aria-hidden="true">' +
+         '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  pin:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+         'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" ' +
+         'aria-hidden="true"><path d="M12 21s6.5-6.2 6.5-11a6.5 6.5 0 0 0-13 0' +
+         'C5.5 14.8 12 21 12 21z"/><circle cx="12" cy="10" r="2.4"/></svg>',
+  host:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+         'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" ' +
+         'aria-hidden="true"><path d="M4 20h16M6 20V9l6-4.5L18 9v11"/>' +
+         '<path d="M10 20v-4h4v4"/></svg>'
+};
+
+/* ------------------------------------------------------------------
+   Card.
+
+   Deliberately spare: a topic label, the title, when, and where. Cost,
+   host, and description were removed because the panel is a scanning aid,
+   not a replacement for the event page. The title is the link, so nothing
+   in the panel competes with clicking through.
+------------------------------------------------------------------ */
+function cardInner(ev, st, grouped) {
+  var bits = [];
+
+  bits.push('<div class="ctop">');
+  if (st === "live") {
+    bits.push('<span class="liveflag"><span class="beacon"></span>Live now</span>');
+  } else if (st === "cancel") {
+    bits.push('<span class="tag cancel">Cancelled</span>');
+  }
+  if (grouped > 1) {
+    bits.push('<button class="tag count toggle" type="button" data-k="' +
+              esc(groupKey(ev)) + '" aria-pressed="' + !!expanded[groupKey(ev)] +
+              '">' + grouped + " dates" + "</button>");
+  }
+  bits.push("</div>");
+
+  bits.push('<h3 class="ctitle"><a href="' + esc(ev.url) + '" target="_blank" ' +
+            'rel="noopener">' + esc(ev.title) + "</a></h3>");
+
+  bits.push('<div class="facts">');
+  bits.push('<div class="factrow"><span class="ico">' + ICON.clock + "</span>" +
+            '<span class="txt"><b>' + esc(whenText(ev)) + "</b>" +
+            (st === "past" ? ' <span class="rel">' +
+              esc(relative(ev.starts_ts)) + "</span>" : "") + "</span></div>");
+  bits.push('<div class="factrow"><span class="ico">' + ICON.pin + "</span>" +
+            '<span class="txt clamp">' +
+            esc(ev.location || "Location not listed") + "</span></div>");
+  bits.push("</div>");
+
+  bits.push('<div class="cfoot">' +
+            '<span class="tag">' + esc(ev.topic || "Other") + "</span>" +
+            (grouped > 1
+              ? '<span class="tag count">' + grouped + " dates</span>" : "") +
+            "</div>");
+
+  return bits.join("");
+}
+
+/* A panel with no repeats to group is just the plain card. The topic rides
+   on the element so the palette can tint the rule and the label. */
+function card(ev, st) {
+  return '<article class="card is-' + st +
+         (st === "cancel" ? " is-cancelled" : "") +
+         '" data-topic="' + esc(ev.topic || "Other") + '">' +
+         cardInner(ev, st, 0) + "</article>";
+}
+
+function groupCard(block) {
+  var n = block.items.length;
+  if (n < 2) return card(block.rep, block.state);
+
+  return '<article class="card is-' + block.state +
+         (block.state === "cancel" ? " is-cancelled" : "") +
+         '" data-topic="' + esc(block.rep.topic || "Other") + '">' +
+         cardInner(block.rep, block.state, n) + "</article>";
+}
+
+function groupList(list, st) {
+  var seen = {}, out = [];
+  list.forEach(function (ev) {
+    var k = groupKey(ev);
+    if (seen[k]) { seen[k].items.push(ev); return; }
+    seen[k] = { key: k, state: st, rep: ev, items: [ev] };
+    out.push(seen[k]);
+  });
+  out.sort(function (a, b) { return byClock(a.rep, b.rep); });
+  return out;
+}
+
+/* ------------------------------------------------------------------
+   Render
+------------------------------------------------------------------ */
+function emptyState() {
+  return { live: 0, soon: 0, past: 0, cancel: 0 };
+}
+
+function render() {
+  var hits = DATA.filter(matches);
+  hits.sort(byClock);
+
+  var byState = emptyState();
+  hits.forEach(function (ev) { byState[stateOf(ev)]++; });
+
+  var out = [];
+  var cards = 0;
+  var order = state === "all" ? ["live", "soon", "past", "cancel"] : [state];
+
+  order.forEach(function (key) {
+    var list = hits.filter(function (ev) { return stateOf(ev) === key; });
+    if (!list.length) return;
+    var blocks = groupList(list, key);
+    cards += blocks.length;
+
+    /* Within a section, break into days. Cancelled has no useful day
+       grouping, so it stays a flat grid. */
+    if (key === "cancel") {
+      out.push('<section class="day"><div class="dayhead">' +
+               '<h2>Cancelled</h2><span class="n">' + list.length +
+               " called off</span></div><div class='grid'>" +
+               blocks.map(groupCard).join("") + "</div></section>");
+      return;
+    }
+
+    if (key === "live") {
+      out.push('<section class="day"><div class="dayhead">' +
+               '<h2>Happening now</h2><span class="rel">right this minute</span>' +
+               '<span class="n">' + list.length + "</span></div><div class='grid'>" +
+               blocks.map(groupCard).join("") + "</div></section>");
+      return;
+    }
+
+    /* A run spanning many days has no single day, so it leads the
+       section instead of being dropped into an arbitrary one. */
+    var spanning = [], byDay = {};
+    blocks.forEach(function (b) {
+      var t = b.rep.starts_ts;
+      var isSpan = b.rep.multi_day && b.rep.ends_ts &&
+                   midnight(b.rep.ends_ts) !== midnight(t);
+      if (isSpan) { spanning.push(b); return; }
+      var k = t ? midnight(t) : 0;
+      (byDay[k] = byDay[k] || []).push(b);
+    });
+
+    var head = key === "soon" ? "Upcoming" : "Already happened";
+    out.push('<div class="dayhead" style="margin-top:32px">' +
+             '<h2>' + head + '</h2><span class="n">' + list.length +
+             (spanning.length ? " / " + spanning.length + " running" : "") +
+             "</span></div>");
+
+    if (spanning.length) {
+      out.push('<div class="grid">' + spanning.map(groupCard).join("") + "</div>");
+    }
+
+    Object.keys(byDay).sort(function (a, b) {
+      return key === "soon" ? a - b : b - a;
+    }).forEach(function (k) {
+      var dayBlocks = byDay[k].sort(function (a, b) { return byClock(a.rep, b.rep); });
+      var t0 = midnight(NOW);
+      var lump = Number(k);
+      var pill = "";
+      if (lump === t0) pill = '<span class="pill today">Today</span>';
+      else if (lump === t0 + DAY) pill = '<span class="pill tomorrow">Tomorrow</span>';
+      out.push('<section class="day"><div class="dayhead">' + pill +
+               "<h2>" + esc(longDay(lump)) + "</h2>" +
+               '<span class="rel">' + esc(relative(lump + DAY / 2)) + "</span>" +
+               '<span class="n">' + dayBlocks.length + "</span></div>" +
+               "<div class='grid'>" + dayBlocks.map(groupCard).join("") + "</div></section>");
+    });
+  });
+
+  if (!cards) {
+    out.push('<div class="none"><h3>Nothing matches that</h3>' +
+             "<p>Try a wider date range, or clear the search.</p>" +
+             '<button class="iconbtn" id="reset" type="button">Reset filters</button></div>');
+  }
+
+  document.getElementById("out").innerHTML = out.join("");
+  document.getElementById("count").textContent =
+    cards === hits.length ? hits.length + " events"
+                          : cards + " cards / " + hits.length + " events";
+
+  paintStats(byState);
+}
+
+function paintStats(byState) {
+  document.getElementById("nowstrip").innerHTML =
+    '<span class="fact"><span class="clock" id="clock">' +
+      new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) +
+    "</span></span>" +
+    '<span class="dotsep"></span>' +
+    '<span class="fact' + (byState.live ? " live" : "") + '"><span class="n">' +
+      byState.live + "</span> live right now</span>" +
+    '<span class="dotsep"></span>' +
+    '<span class="fact"><span class="n">' + byState.soon + "</span> still to come</span>" +
+    '<span class="dotsep"></span>' +
+    '<span class="fact"><span class="n">' + DATA.length + "</span> in this snapshot</span>";
+
+  document.getElementById("footcount").textContent =
+    DATA.length + " events in this snapshot.";
+}
+
+/* ------------------------------------------------------------------
+   Controls
+------------------------------------------------------------------ */
+function chipRow(host, options, current, set) {
+  host.innerHTML = options.map(function (o) {
+    return '<button class="chip" type="button" data-v="' + o.v + '" ' +
+           'aria-pressed="' + (o.v === current) + '">' + o.label +
+           (o.n == null ? "" : ' <span class="tally">' + o.n + "</span>") +
+           "</button>";
+  }).join("");
+  host.onclick = function (e) {
+    var b = e.target.closest(".chip");
+    if (!b) return;
+    set(b.dataset.v);
+    [].forEach.call(host.children, function (c) {
+      c.setAttribute("aria-pressed", String(c.dataset.v === b.dataset.v));
+    });
+    render();
+  };
+}
+
+var stateBox = document.getElementById("states");
+
+function tallyStates() {
+  var c = emptyState();
+  DATA.forEach(function (ev) { c[stateOf(ev)]++; });
+  return c;
+}
+
+function buildStateChips() {
+  var c = tallyStates();
+  chipRow(stateBox, [
+    { v: "all", label: "All", n: DATA.length },
+    { v: "live", label: "Live", n: c.live },
+    { v: "soon", label: "Upcoming", n: c.soon },
+    { v: "past", label: "Past", n: c.past }
+  ], state, function (v) { state = v; });
+}
+
+/* Topics come from the data, ordered big-to-small, with Other pinned last.
+   The row scrolls sideways on a phone rather than wrapping to five lines. */
+var topicBox = document.getElementById("topics");
+var topicCounts = {};
+DATA.forEach(function (ev) {
+  var t = ev.topic || "Other";
+  topicCounts[t] = (topicCounts[t] || 0) + 1;
+});
+
+function buildTopicChips() {
+  var names = Object.keys(topicCounts).sort(function (a, b) {
+    if (a === "Other") return 1;
+    if (b === "Other") return -1;
+    return topicCounts[b] - topicCounts[a] || a.localeCompare(b);
+  });
+  /* Built by hand rather than through chipRow, because each chip needs a
+     colour dot and a data-topic attribute for the palette to reach it. */
+  var html = ['<button class="chip topic" type="button" data-topic="" ' +
+              'data-v="" aria-pressed="' + (topic === "") + '">' +
+              '<span class="dot" style="background:var(--ink-4)"></span>' +
+              "All topics <span class=\"tally\">" + DATA.length +
+              "</span></button>"];
+  names.forEach(function (t) {
+    html.push('<button class="chip topic" type="button" data-v="' + esc(t) +
+              '" data-topic="' + esc(t) + '" aria-pressed="' + (topic === t) +
+              '"><span class="dot"></span>' + esc(t) +
+              ' <span class="tally">' + topicCounts[t] + "</span></button>");
+  });
+  topicBox.innerHTML = html.join("");
+  topicBox.onclick = function (e) {
+    var b = e.target.closest(".chip");
+    if (!b) return;
+    topic = b.dataset.v;
+    [].forEach.call(topicBox.children, function (c) {
+      c.setAttribute("aria-pressed", String(c.dataset.v === b.dataset.v));
+    });
+    expanded = {};
+    render();
+  };
+}
+
+
+var qBox = document.getElementById("q");
+var qTimer;
+var clearBtn = document.getElementById("clear");
+
+function applySearch(value) {
+  qBox.value = value;
+  q = value.trim().toLowerCase();
+  clearBtn.hidden = value.length === 0;
+  render();
+}
+
+qBox.oninput = function () {
+  clearTimeout(qTimer);
+  clearBtn.hidden = this.value.length === 0;
+  var v = this.value;
+  qTimer = setTimeout(function () { applySearch(v); }, 140);
+};
+
+clearBtn.onclick = function () {
+  clearTimeout(qTimer);
+  applySearch("");
+  qBox.focus();
+};
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "/" && document.activeElement !== qBox) {
+    e.preventDefault(); qBox.focus();
+  } else if (e.key === "Escape") {
+    clearTimeout(qTimer);
+    applySearch("");
+    qBox.blur();
+  }
+});
+
+document.getElementById("out").addEventListener("click", function (e) {
+  if (e.target.id === "reset") {
+    state = "all"; topic = ""; q = "";
+    qBox.value = ""; clearBtn.hidden = true;
+    buildStateChips(); buildTopicChips(); render();
+    return;
+  }
+  var t = e.target.closest(".toggle");
+  if (t) {
+    var k = t.dataset.k;
+    if (expanded[k]) delete expanded[k]; else expanded[k] = true;
+    render();
+    return;
+  }
+});
+
+/* Light is the default. Remember whatever the reader picks. */
+var themeBtn = document.getElementById("theme");
+function setTheme(t) {
+  document.documentElement.dataset.theme = t;
+  themeBtn.textContent = t === "light" ? "Dark mode" : "Light mode";
+  try { localStorage.setItem("uconn-events-theme", t); } catch (err) {}
+}
+var saved = null;
+try { saved = localStorage.getItem("uconn-events-theme"); } catch (err) {}
+setTheme(saved === "dark" ? "dark" : "light");
+themeBtn.onclick = function () {
+  setTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light");
+};
+
+/* Re-evaluate the clock so live and past stay honest. */
+setInterval(function () {
+  NOW = Date.now();
+  var c = document.getElementById("clock");
+  if (c) c.textContent = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  buildStateChips();
+  render();
+}, 30000);
+
+buildStateChips();
+buildTopicChips();
+render();
+</script>
+</body>
+</html>

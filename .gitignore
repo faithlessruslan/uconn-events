@@ -1,0 +1,8 @@
+# Scraped page cache. Rebuilt on demand, and about 80 MB of raw HTML.
+scraper/cache/
+
+# Audit tool dependencies.
+tools/node_modules/
+tools/package-lock.json
+
+.DS_Store
