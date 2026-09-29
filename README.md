@@ -73,6 +73,33 @@ by Dining Services is Food, not Academic, even though a university runs it.
 `Other` is 2.4%, which is the honest residue rather than a claim of full
 accuracy. A topic is a hint, not a fact.
 
+### How the colour works
+
+Each topic carries its colour in three places, so it reads at a glance:
+
+1. a 4px strip across the top of the panel
+2. a 24% tint of the same colour over the whole panel (18% in dark mode,
+   where the same value looks heavier)
+3. a filled label, white on the colour in light mode and near-black on the
+   lightened colour in dark mode
+
+Colour is never the only cue. The label spells the topic out, and the topic
+chips repeat the same colour and word.
+
+Every value is measured rather than picked by eye. Worst case across all ten
+topics:
+
+| | Light | Dark | Needs |
+|---|---|---|---|
+| Label on its fill | 5.01 | 5.62 | 4.5 |
+| Title on the panel | 11.91 | 10.40 | 4.5 |
+| Date and place | 6.31 | 7.18 | 4.5 |
+
+`tools/contrast-check.mjs` measures those directly, per topic, in both themes,
+through a real browser. Three colours had to change once the panels were
+tinted: the live green measured 4.22 on a tint, the cancelled title 3.84, and
+the label text 4.26.
+
 ## The look
 
 Built to be pleasant to scan rather than merely legible.
@@ -111,6 +138,7 @@ Built to be pleasant to scan rather than merely legible.
 | `scraper/verify.py` | Re-checks the numbers, the invariants, and the house rules |
 | `tools/ux-audit.mjs` | Accessibility and UX audit: axe-core, contrast, tap targets, overflow |
 | `tools/shot.mjs` | Screenshot a page at any viewport, for looking at rather than measuring |
+| `tools/contrast-check.mjs` | Measures label, title, and body contrast for every topic, both themes |
 
 ## How the data is fetched
 

@@ -22,15 +22,15 @@
   /* ink-3 and ink-4 are tuned for WCAG AA on card, paper, and paper-2.
      The earlier values measured 4.07 and 2.18 and failed an axe audit. */
   --ink-3: #6b6862;
-  --ink-4: #6f6c66;
+  --ink-4: #5a5852;
   --navy: #0a3d62;
   --navy-2: #12507e;
   --navy-wash: #eaf1f7;
   --gold: #7d5610;
   --gold-wash: #fbf2e0;
-  --live: #12704a;
+  --live: #0f6440;
   --live-wash: #e6f4ec;
-  --live-ring: rgba(18, 112, 74, .35);
+  --live-ring: rgba(15, 100, 64, .38);
   --rose: #a03a3a;
   --rose-wash: #fbecec;
   --shadow-s: 0 1px 2px rgba(28, 27, 25, .05);
@@ -51,13 +51,13 @@
   --ink: #ecedf0;
   --ink-2: #c3c7cf;
   --ink-3: #a2a8b2;
-  --ink-4: #8b929c;
+  --ink-4: #8f959f;
   --navy: #7fb6de;
   --navy-2: #9cc8e8;
   --navy-wash: #1b2632;
   --gold: #d8a64a;
   --gold-wash: #2c2415;
-  --live: #52cf9c;
+  --live: #5cd9a5;
   --live-wash: #16301f;
   --live-ring: rgba(82, 207, 156, .3);
   --rose: #e88a8a;
@@ -225,95 +225,84 @@ select:focus { outline: none; border-color: var(--navy); }
 
 
 /* ============================================================
-   Topic colour. Two variables per topic, both measured to clear WCAG AA
-   against the surface they land on:
+   Topic colour.
 
-     --topic-base   the saturated colour, for the chip dot and the panel rule
-     --topic-accent dark mode swaps this for a lightened value, because the
-                    saturated one fails on the dark card
-     --topic-ink    dark enough for text on that topic's wash (light mode)
-     --topic-wash   the label background
+   Three places carry the topic, so it reads at a glance and does not rely on
+   one small label:
 
-   Kept as a tint rather than a filled block: the page already uses colour to
-   mean state, so a second loud palette would fight it. The label always
-   carries the word too, so colour is never the only cue.
+     1. a 4px strip across the top of the panel
+     2. a 24% tint of the same colour over the whole panel
+        (18% in dark mode, where the same value would look heavier)
+     3. a filled label, white on the colour
+
+   Every value is measured, not picked by eye:
+
+     - the fill clears 5.0:1 against white text (AA wants 4.5)
+     - the body text clears 6.3:1 on the tint in light, 7.1:1 in dark,
+     both past the 4.5:1 requirement
+     - in dark mode the fill is lightened until it clears 5.0:1 against the
+       dark panel, and the label flips to near-black text, because white on
+       those fills only reached 3.1:1
+
+   Colour is never the only cue: the label always spells the topic out, and
+   the chips repeat the same colour with the same word.
    ============================================================ */
 [data-topic] {
-  --topic-base: var(--ink-4);
-  --topic-accent: var(--topic-base);
-  --topic-wash: var(--paper-2);
-  --topic-ink: var(--ink-2);
+  --topic-fill: var(--ink-4);
+  --topic-tint: var(--card);
+  --topic-label: #ffffff;
 }
-[data-topic="Academic and research"] {
-  --topic-base: #2f5d8a; --topic-accent: #2f5d8a;
-  --topic-wash: #e8eef5; --topic-ink: #2f5d8a;
-}
-[data-topic="Sports and fitness"] {
-  --topic-base: #2f7a56; --topic-accent: #2d7653;
-  --topic-wash: #e6f1ea; --topic-ink: #2d7653;
-}
-[data-topic="Health and wellness"] {
-  --topic-base: #1f7a78; --topic-accent: #1e7674;
-  --topic-wash: #e2f0f0; --topic-ink: #1e7674;
-}
-[data-topic="Community and service"] {
-  --topic-base: #6b5aa6; --topic-accent: #6b5aa6;
-  --topic-wash: #ece8f6; --topic-ink: #6b5aa6;
-}
-[data-topic="Music and performance"] {
-  --topic-base: #9c4f7e; --topic-accent: #9c4f7e;
-  --topic-wash: #f6e9f1; --topic-ink: #9c4f7e;
-}
-[data-topic="Career and jobs"] {
-  --topic-base: #996a1c; --topic-accent: #8f631a;
-  --topic-wash: #f6eeda; --topic-ink: #8f631a;
-}
-[data-topic="Arts and exhibits"] {
-  --topic-base: #8a4f2f; --topic-accent: #8a4f2f;
-  --topic-wash: #f5eae2; --topic-ink: #8a4f2f;
-}
-[data-topic="Campus life"] {
-  --topic-base: #55606f; --topic-accent: #55606f;
-  --topic-wash: #eaecef; --topic-ink: #55606f;
-}
-[data-topic="Food and dining"] {
-  --topic-base: #a0532a; --topic-accent: #a0532a;
-  --topic-wash: #f8e9df; --topic-ink: #a0532a;
-}
-[data-topic="Other"] {
-  --topic-base: #8f8b83; --topic-accent: #6c6963;
-  --topic-wash: #f0efec; --topic-ink: #6c6963;
-}
-[data-theme="dark"] [data-topic="Academic and research"] { --topic-accent: #4890d5; --topic-ink: #a8cdeb; --topic-wash: #1b2734; }
-[data-theme="dark"] [data-topic="Sports and fitness"]    { --topic-accent: #3a986b; --topic-ink: #8fd6b3; --topic-wash: #16281f; }
-[data-theme="dark"] [data-topic="Health and wellness"]   { --topic-accent: #269896; --topic-ink: #85d6d4; --topic-wash: #132827; }
-[data-theme="dark"] [data-topic="Community and service"] { --topic-accent: #9079e0; --topic-ink: #c3b6f0; --topic-wash: #221d33; }
-[data-theme="dark"] [data-topic="Music and performance"] { --topic-accent: #ca66a3; --topic-ink: #eaa9cd; --topic-wash: #2c1a26; }
-[data-theme="dark"] [data-topic="Career and jobs"]       { --topic-accent: #b77f21; --topic-ink: #e0b976; --topic-wash: #292013; }
-[data-theme="dark"] [data-topic="Arts and exhibits"]     { --topic-accent: #c87244; --topic-ink: #e6ae8d; --topic-wash: #2c1e16; }
-[data-theme="dark"] [data-topic="Campus life"]           { --topic-accent: #7b8ba0; --topic-ink: #b3c0d0; --topic-wash: #1e2229; }
-[data-theme="dark"] [data-topic="Food and dining"]       { --topic-accent: #d87038; --topic-ink: #efab8a; --topic-wash: #2d1d14; }
-[data-theme="dark"] [data-topic="Other"]                 { --topic-accent: #8f8b83; --topic-ink: #bcb8b0; --topic-wash: #232322; }
+[data-topic="Academic and research"] { --topic-fill: #2f5d8a; --topic-tint: #cdd8e3; }
+[data-topic="Sports and fitness"]    { --topic-fill: #2f7a56; --topic-tint: #cddfd6; }
+[data-topic="Health and wellness"]   { --topic-fill: #1f7a78; --topic-tint: #c9dfdf; }
+[data-topic="Community and service"] { --topic-fill: #6b5aa6; --topic-tint: #dbd7ea; }
+[data-topic="Music and performance"] { --topic-fill: #9c4f7e; --topic-tint: #e7d5e0; }
+[data-topic="Career and jobs"]       { --topic-fill: #92651a; --topic-tint: #e5dac8; }
+[data-topic="Arts and exhibits"]     { --topic-fill: #8a4f2f; --topic-tint: #e3d5cd; }
+[data-topic="Campus life"]           { --topic-fill: #55606f; --topic-tint: #d6d9dc; }
+[data-topic="Food and dining"]       { --topic-fill: #a0532a; --topic-tint: #e8d6cc; }
+[data-topic="Other"]                 { --topic-fill: #726f68; --topic-tint: #dddcdb; }
 
-/* The panel's left rule carries the topic. A live panel keeps its green rule,
-   because being live right now matters more than what it is about. */
-article.card { border-left: 3px solid var(--topic-accent, var(--line)); }
-article.card.is-live { border-left-color: var(--live); }
+[data-theme="dark"] [data-topic="Academic and research"] { --topic-fill: #4b94dc; --topic-tint: #263648; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Sports and fitness"]    { --topic-fill: #3ea272; --topic-tint: #243834; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Health and wellness"]   { --topic-fill: #29a29f; --topic-tint: #20383d; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Community and service"] { --topic-fill: #977feb; --topic-tint: #34324a; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Music and performance"] { --topic-fill: #d86daf; --topic-tint: #3f2f3f; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Career and jobs"]       { --topic-fill: #c28623; --topic-tint: #3c3326; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Arts and exhibits"]     { --topic-fill: #d47948; --topic-tint: #3f312d; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Campus life"]           { --topic-fill: #8293aa; --topic-tint: #30363f; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Food and dining"]       { --topic-fill: #de733a; --topic-tint: #41302a; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Other"]                 { --topic-fill: #938f86; --topic-tint: #333538; --topic-label: #14161a; }
 
-/* Chip dot repeats the topic colour so the link to the panel is obvious. */
-.chip.topic { border-color: color-mix(in srgb, var(--topic-accent) 32%, var(--line)); }
+/* The panel. The strip is a pseudo-element so no extra markup is needed, and
+   the tint replaces the plain surface. */
+article.card::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0;
+  height: 4px; background: var(--topic-fill, var(--line));
+  border-radius: var(--r-m) var(--r-m) 0 0;
+}
+
+/* The label: solid fill, so the topic is legible at a glance. */
+.cfoot .tag {
+  background: var(--topic-fill); color: var(--topic-label);
+  font-weight: 600; padding: 3px 9px;
+}
+.cfoot .tag.count {
+  background: var(--ink); color: var(--paper);
+}
+
+/* Chips repeat the colour and the word. */
+.chip.topic { border-color: color-mix(in srgb, var(--topic-fill) 45%, var(--line)); }
 .chip.topic .dot {
-  width: 8px; height: 8px; border-radius: 50%; flex: none;
-  background: var(--topic-accent);
+  width: 9px; height: 9px; border-radius: 50%; flex: none;
+  background: var(--topic-fill);
 }
 .chip.topic[aria-pressed="true"] {
-  background: var(--topic-accent); border-color: var(--topic-accent); color: #fff;
+  background: var(--topic-fill); border-color: var(--topic-fill);
+  color: var(--topic-label);
 }
-.chip.topic[aria-pressed="true"] .dot { background: #fff; }
-.chip.topic[aria-pressed="true"] .tally { color: #ffffff; }
-
-/* Panel label: topic ink on its own wash. */
-.cfoot .tag { background: var(--topic-wash); color: var(--topic-ink); }
+.chip.topic[aria-pressed="true"] .dot { background: var(--topic-label); }
+.chip.topic[aria-pressed="true"] .tally { color: var(--topic-label); }
 
 /* ============================================================
    Day grouping — the thing that makes a list of 1000
@@ -361,7 +350,8 @@ article.card.is-live { border-left-color: var(--live); }
    Cards
    ============================================================ */
 article.card {
-  background: var(--card); border: 1px solid var(--line);
+  background: var(--topic-tint, var(--card));
+  border: 1px solid var(--line);
   border-radius: var(--r-m); padding: 13px 16px 12px;
   box-shadow: var(--shadow-s);
   display: flex; flex-direction: column; gap: 9px;
@@ -383,7 +373,12 @@ article.card.is-live {
 }
 article.card.is-past { box-shadow: none; background: var(--paper-2); }
 article.card.is-past .ctitle a { color: var(--ink-2); }
-article.card.is-cancelled .ctitle a { text-decoration: line-through; color: var(--ink-3); }
+/* A cancelled panel is tinted by its topic, so the title needs the darker
+   measured colour: ink-3 read 3.84 against those tints. */
+article.card.is-cancelled .ctitle a {
+  text-decoration: line-through; color: var(--ink-2);
+  text-decoration-thickness: 1.5px;
+}
 
 .liveflag {
   display: inline-flex; align-items: center; gap: 6px;

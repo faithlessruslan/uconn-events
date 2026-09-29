@@ -101,9 +101,12 @@ def main():
           ("/*__DATA__*/" in page) or ("__BUILT__" in page), False)
 
     print("\nhouse rules")
-    for label, path in (("index.html", HTML_PATH),
-                        ("uconn-events.csv", CSV_PATH),
-                        ("template.html", TEMPLATE_PATH)):
+    extra = [os.path.join(ROOT, "tools", n)
+             for n in ("ux-audit.mjs", "shot.mjs", "contrast-check.mjs")]
+    targets = [("index.html", HTML_PATH), ("uconn-events.csv", CSV_PATH),
+               ("template.html", TEMPLATE_PATH)]
+    targets += [(os.path.basename(x), x) for x in extra if os.path.exists(x)]
+    for label, path in targets:
         with open(path, encoding="utf-8") as fh:
             body = fh.read()
         hits = EMOJI.findall(body)
