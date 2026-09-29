@@ -83,8 +83,26 @@ Each topic carries its colour in three places, so it reads at a glance:
 3. a filled label, white on the colour in light mode and near-black on the
    lightened colour in dark mode
 
+The filter chips use the **same tint and the same dot colour** as the panels
+they lead to, so a chip and its panels read as one family.
+
 Colour is never the only cue. The label spells the topic out, and the topic
 chips repeat the same colour and word.
+
+### The catalog bar
+
+The topic chips wrap onto as many rows as they need. They were one
+sideways-scrolling row before, which hid most of the topics behind a scroll
+and broke the "see everything at a glance" job the row exists for.
+
+| Width | Rows |
+|---|---|
+| 1280 and wider | 2 |
+| 768 | 3 |
+| 390 | 6 |
+
+Nothing is hidden at any width, and there is no horizontal scrolling anywhere
+on the page.
 
 Every value is measured rather than picked by eye. Worst case across all ten
 topics:

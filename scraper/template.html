@@ -187,15 +187,16 @@ select {
 }
 select:focus { outline: none; border-color: var(--navy); }
 
-.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chips { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
 .chip {
   background: var(--card); border: 1px solid var(--line);
-  border-radius: 999px; padding: 6px 13px; font-size: 13.5px;
+  border-radius: 999px; padding: 5px 10px; font-size: 12.5px;
+  line-height: 1.35;
   box-shadow: var(--shadow-s); transition: all .15s;
   display: inline-flex; align-items: center; gap: 6px;
 }
 .chip:hover { border-color: var(--ink-4); }
-.chip .tally { font-size: 11.5px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
+.chip .tally { font-size: 11px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
 .chip[aria-pressed="true"] {
   background: var(--ink); color: var(--paper); border-color: var(--ink);
   font-weight: 550;
@@ -203,49 +204,50 @@ select:focus { outline: none; border-color: var(--navy); }
 .chip[aria-pressed="true"] .tally { color: #ffffff; }
 .count { color: var(--ink-3); font-size: 13px; margin-left: auto; white-space: nowrap; }
 
-/* Topic chips: one row that scrolls sideways on a narrow screen rather than
-   wrapping into five rows and pushing the events off the first screen. */
-.topicscroll {
-  overflow-x: auto; overflow-y: hidden; padding-bottom: 2px;
-  /* min-width: 0 is essential: a flex item defaults to min-content width,
-     so without it this row grew to 1939px and dragged the page with it. */
-  min-width: 0; width: 100%; max-width: 100%;
-  -webkit-overflow-scrolling: touch; scrollbar-width: thin;
-}
-/* align-items matters: the flex default is stretch, which made every topic
-   chip as tall as the tallest one and turned the pills into circles. */
-.topicscroll .chips { flex-wrap: nowrap; align-items: center; }
-.topicscroll .chip { flex: 0 0 auto; white-space: nowrap; }
-.chip.topic[aria-pressed="true"] {
-  background: var(--navy); border-color: var(--navy); color: #fff;
-}
-.chip.topic[aria-pressed="true"] .tally {
-  color: color-mix(in srgb, #ffffff 70%, transparent);
-}
+/* Topic chips wrap onto as many rows as they need. They used to be one
+   sideways-scrolling row, which hid most of the topics behind a scroll.
 
+   Each chip's surface is the same tint as the panels it filters to, so a chip
+   and its panels read as one family. A hairline of the topic colour is mixed
+   into the border too, or the palest tints would look like no chip at all. */
+.chip.topic {
+  background: var(--topic-tint);
+  border-color: color-mix(in srgb, var(--topic-fill) 24%, var(--line));
+}
+.chip.topic .dot {
+  width: 8px; height: 8px; border-radius: 50%; flex: none;
+  background: var(--topic-fill);
+}
+.chip.topic:hover { border-color: var(--topic-fill); }
+.chip.topic[aria-pressed="true"] {
+  background: var(--topic-fill); border-color: var(--topic-fill);
+  color: var(--topic-label);
+}
+.chip.topic[aria-pressed="true"] .dot { background: var(--topic-label); }
+.chip.topic[aria-pressed="true"] .tally { color: var(--topic-label); }
+/* "All topics" belongs to no topic, so it takes the neutral surface. */
+.chip.alltopics { background: var(--paper-2); }
 
 /* ============================================================
    Topic colour.
 
-   Three places carry the topic, so it reads at a glance and does not rely on
+   Three places carry the topic, so it reads at a glance and never rests on
    one small label:
 
      1. a 4px strip across the top of the panel
-     2. a 24% tint of the same colour over the whole panel
-        (18% in dark mode, where the same value would look heavier)
-     3. a filled label, white on the colour
+     2. a 24% tint of the same colour over the panel (18% in dark mode, where
+        the same value would look heavier)
+     3. a filled label, white on the colour in light mode and near-black on
+        the lightened colour in dark mode
 
    Every value is measured, not picked by eye:
 
-     - the fill clears 5.0:1 against white text (AA wants 4.5)
-     - the body text clears 6.3:1 on the tint in light, 7.1:1 in dark,
-     both past the 4.5:1 requirement
-     - in dark mode the fill is lightened until it clears 5.0:1 against the
-       dark panel, and the label flips to near-black text, because white on
-       those fills only reached 3.1:1
+     - the fill clears 5.0:1 against its own label
+     - the title clears 11.9:1 light and 10.4:1 dark on the tint
+     - the date and place clear 6.3:1 light and 7.2:1 dark
 
-   Colour is never the only cue: the label always spells the topic out, and
-   the chips repeat the same colour with the same word.
+   Colour is never the only cue. The label spells the topic out, and the
+   filter chips repeat the same colour and the same word.
    ============================================================ */
 [data-topic] {
   --topic-fill: var(--ink-4);
@@ -253,36 +255,35 @@ select:focus { outline: none; border-color: var(--navy); }
   --topic-label: #ffffff;
 }
 [data-topic="Academic and research"] { --topic-fill: #2f5d8a; --topic-tint: #cdd8e3; }
-[data-topic="Sports and fitness"]    { --topic-fill: #2f7a56; --topic-tint: #cddfd6; }
-[data-topic="Health and wellness"]   { --topic-fill: #1f7a78; --topic-tint: #c9dfdf; }
+[data-topic="Sports and fitness"] { --topic-fill: #2f7a56; --topic-tint: #cddfd6; }
+[data-topic="Health and wellness"] { --topic-fill: #1f7a78; --topic-tint: #c9dfdf; }
 [data-topic="Community and service"] { --topic-fill: #6b5aa6; --topic-tint: #dbd7ea; }
 [data-topic="Music and performance"] { --topic-fill: #9c4f7e; --topic-tint: #e7d5e0; }
-[data-topic="Career and jobs"]       { --topic-fill: #92651a; --topic-tint: #e5dac8; }
-[data-topic="Arts and exhibits"]     { --topic-fill: #8a4f2f; --topic-tint: #e3d5cd; }
-[data-topic="Campus life"]           { --topic-fill: #55606f; --topic-tint: #d6d9dc; }
-[data-topic="Food and dining"]       { --topic-fill: #a0532a; --topic-tint: #e8d6cc; }
-[data-topic="Other"]                 { --topic-fill: #726f68; --topic-tint: #dddcdb; }
+[data-topic="Career and jobs"] { --topic-fill: #92651a; --topic-tint: #e5dac8; }
+[data-topic="Arts and exhibits"] { --topic-fill: #8a4f2f; --topic-tint: #e3d5cd; }
+[data-topic="Campus life"] { --topic-fill: #55606f; --topic-tint: #d6d9dc; }
+[data-topic="Food and dining"] { --topic-fill: #a0532a; --topic-tint: #e8d6cc; }
+[data-topic="Other"] { --topic-fill: #726f68; --topic-tint: #dddcdb; }
 
 [data-theme="dark"] [data-topic="Academic and research"] { --topic-fill: #4b94dc; --topic-tint: #263648; --topic-label: #14161a; }
-[data-theme="dark"] [data-topic="Sports and fitness"]    { --topic-fill: #3ea272; --topic-tint: #243834; --topic-label: #14161a; }
-[data-theme="dark"] [data-topic="Health and wellness"]   { --topic-fill: #29a29f; --topic-tint: #20383d; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Sports and fitness"] { --topic-fill: #3ea272; --topic-tint: #243834; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Health and wellness"] { --topic-fill: #29a29f; --topic-tint: #20383d; --topic-label: #14161a; }
 [data-theme="dark"] [data-topic="Community and service"] { --topic-fill: #977feb; --topic-tint: #34324a; --topic-label: #14161a; }
 [data-theme="dark"] [data-topic="Music and performance"] { --topic-fill: #d86daf; --topic-tint: #3f2f3f; --topic-label: #14161a; }
-[data-theme="dark"] [data-topic="Career and jobs"]       { --topic-fill: #c28623; --topic-tint: #3c3326; --topic-label: #14161a; }
-[data-theme="dark"] [data-topic="Arts and exhibits"]     { --topic-fill: #d47948; --topic-tint: #3f312d; --topic-label: #14161a; }
-[data-theme="dark"] [data-topic="Campus life"]           { --topic-fill: #8293aa; --topic-tint: #30363f; --topic-label: #14161a; }
-[data-theme="dark"] [data-topic="Food and dining"]       { --topic-fill: #de733a; --topic-tint: #41302a; --topic-label: #14161a; }
-[data-theme="dark"] [data-topic="Other"]                 { --topic-fill: #938f86; --topic-tint: #333538; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Career and jobs"] { --topic-fill: #c28623; --topic-tint: #3c3326; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Arts and exhibits"] { --topic-fill: #d47948; --topic-tint: #3f312d; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Campus life"] { --topic-fill: #8293aa; --topic-tint: #30363f; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Food and dining"] { --topic-fill: #de733a; --topic-tint: #41302a; --topic-label: #14161a; }
+[data-theme="dark"] [data-topic="Other"] { --topic-fill: #938f86; --topic-tint: #333538; --topic-label: #14161a; }
 
-/* The panel. The strip is a pseudo-element so no extra markup is needed, and
-   the tint replaces the plain surface. */
+/* The panel strip. A pseudo-element, so no extra markup is needed. */
 article.card::before {
   content: ""; position: absolute; left: 0; right: 0; top: 0;
   height: 4px; background: var(--topic-fill, var(--line));
   border-radius: var(--r-m) var(--r-m) 0 0;
 }
 
-/* The label: solid fill, so the topic is legible at a glance. */
+/* The label: a solid fill, so the topic is legible at a glance. */
 .cfoot .tag {
   background: var(--topic-fill); color: var(--topic-label);
   font-weight: 600; padding: 3px 9px;
@@ -290,19 +291,6 @@ article.card::before {
 .cfoot .tag.count {
   background: var(--ink); color: var(--paper);
 }
-
-/* Chips repeat the colour and the word. */
-.chip.topic { border-color: color-mix(in srgb, var(--topic-fill) 45%, var(--line)); }
-.chip.topic .dot {
-  width: 9px; height: 9px; border-radius: 50%; flex: none;
-  background: var(--topic-fill);
-}
-.chip.topic[aria-pressed="true"] {
-  background: var(--topic-fill); border-color: var(--topic-fill);
-  color: var(--topic-label);
-}
-.chip.topic[aria-pressed="true"] .dot { background: var(--topic-label); }
-.chip.topic[aria-pressed="true"] .tally { color: var(--topic-label); }
 
 /* ============================================================
    Day grouping — the thing that makes a list of 1000
@@ -529,7 +517,7 @@ kbd {
       <span class="count" id="count"></span>
     </div>
     <div class="crow">
-      <div class="topicscroll"><div class="chips" id="topics"></div></div>
+      <div class="chips" id="topics"></div>
     </div>
   </div>
 
@@ -961,7 +949,7 @@ function buildTopicChips() {
   });
   /* Built by hand rather than through chipRow, because each chip needs a
      colour dot and a data-topic attribute for the palette to reach it. */
-  var html = ['<button class="chip topic" type="button" data-topic="" ' +
+  var html = ['<button class="chip topic alltopics" type="button" data-topic="" ' +
               'data-v="" aria-pressed="' + (topic === "") + '">' +
               '<span class="dot" style="background:var(--ink-4)"></span>' +
               "All topics <span class=\"tally\">" + DATA.length +
